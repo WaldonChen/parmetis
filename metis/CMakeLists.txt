@@ -5,7 +5,7 @@ set(METIS_MAJOR_VERSION 5)
 set(METIS_MINOR_VERSION 1)
 set(METIS_PATCH_VERSION 0)
 
-set(GKLIB_PATH "${CMAKE_SOURCE_DIR}/GKlib" CACHE PATH "path to GKlib")
+set(GKLIB_PATH "${PROJECT_SOURCE_DIR}/GKlib" CACHE PATH "path to GKlib")
 set(SHARED FALSE CACHE BOOL "build a shared library")
 include(GNUInstallDirs)
 

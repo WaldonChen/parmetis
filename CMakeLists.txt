@@ -5,8 +5,8 @@ set(PARMETIS_MAJOR_VERSION 4)
 set(PARMETIS_MINOR_VERSION 0)
 set(PARMETIS_PATCH_VERSION 3)
 
-set(GKLIB_PATH ${CMAKE_SOURCE_DIR}/metis/GKlib CACHE PATH "path to GKlib")
-set(METIS_PATH ${CMAKE_SOURCE_DIR}/metis CACHE PATH "path to METIS")
+set(GKLIB_PATH ${PROJECT_SOURCE_DIR}/metis/GKlib CACHE PATH "path to GKlib")
+set(METIS_PATH ${PROJECT_SOURCE_DIR}/metis CACHE PATH "path to METIS")
 
 # Symlink ./metis to wherever metis is. This allows files to be
 # included from metis/libmetis/.
