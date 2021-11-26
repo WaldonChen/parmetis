@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 2.8)
 project(ParMETIS)
 
+set(PARMETIS_MAJOR_VERSION 4)
+set(PARMETIS_MINOR_VERSION 0)
+set(PARMETIS_PATCH_VERSION 3)
+
 set(GKLIB_PATH METIS/GKlib CACHE PATH "path to GKlib")
 set(METIS_PATH METIS CACHE PATH "path to METIS")
 
@@ -33,7 +37,28 @@ include_directories(${GKLIB_PATH})
 include_directories(${METIS_PATH}/include)
 
 # List of directories that cmake will look for CMakeLists.txt
+if (METIS_INSTALL)
 add_subdirectory(metis)
+else()
+FIND_PATH(METIS_INCLUDE_DIR metis.h
+  /usr/include
+  $ENV{METIS_PATH}/include
+  )
+
+FIND_LIBRARY(METIS_LIBRARY metis
+  /usr/lib
+  $ENV{METIS_PATH}/lib
+  )
+
+IF(METIS_INCLUDE_DIR)
+  MESSAGE( STATUS, "Using already installed metis")
+  IF(METIS_LIBRARY)
+    SET( METIS_LIBRARIES ${PARMETIS_LIBRARY} ${METIS_LIBRARY})
+    SET( METIS_FOUND "YES" )
+  ENDIF(METIS_LIBRARY)
+ENDIF(METIS_INCLUDE_DIR)
+
+endif()
 add_subdirectory(libparmetis)
 add_subdirectory(include)
 add_subdirectory(programs)

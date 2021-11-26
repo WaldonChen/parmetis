@@ -4,6 +4,10 @@ include_directories(.)
 file(GLOB parmetis_sources *.c)
 # Create libparmetis
 add_library(parmetis SHARED ${parmetis_sources})
+set_target_properties(parmetis PROPERTIES
+  VERSION ${PARMETIS_MAJOR_VERSION}.${PARMETIS_MINOR_VERSION}.${PARMETIS_PATCH_VERSION}
+  SOVERSION ${PARMETIS_MAJOR_VERSION}.${PARMETIS_MINOR_VERSION})
+
 add_library(parmetis_static STATIC ${parmetis_sources})
 set_target_properties(parmetis_static PROPERTIES OUTPUT_NAME parmetis)
 

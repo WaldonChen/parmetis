@@ -8,6 +8,7 @@ add_executable(pometis pometis.c io.c)
 # Link to libparmetis.
 foreach(prog ptest mtest parmetis_prog pometis)
   target_link_libraries(${prog} parmetis)
+  target_link_libraries(${prog} m)
 endforeach(prog)
 
 install(TARGETS ptest mtest parmetis_prog pometis
