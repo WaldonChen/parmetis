@@ -12,6 +12,11 @@ if(UNIX)
   target_link_libraries(metis_static m)
 endif()
 
+target_include_directories(metis PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+target_include_directories(metis_static PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+
 if(METIS_INSTALL)
   install(TARGETS metis metis_static
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"

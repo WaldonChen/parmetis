@@ -17,6 +17,11 @@ set_target_properties(parmetis PROPERTIES LINK_FLAGS "${MPI_LINK_FLAGS}")
 target_link_libraries(parmetis_static metis_static ${MPI_LIBRARIES})
 set_target_properties(parmetis_static PROPERTIES LINK_FLAGS "${MPI_LINK_FLAGS}")
 
+target_include_directories(parmetis PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+target_include_directories(parmetis_static PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+
 install(TARGETS parmetis parmetis_static
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib
