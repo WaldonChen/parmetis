@@ -8,6 +8,10 @@ include(GKlibSystem.cmake)
 
 include_directories(".")
 add_library(GKlib STATIC ${GKlib_sources})
+set_target_properties(GKlib PROPERTIES
+    VERSION ${METIS_MAJOR_VERSION}.${METIS_MINOR_VERSION}.${METIS_PATCH_VERSION}
+    SOVERSION ${METIS_MAJOR_VERSION})
+
 if(UNIX)
   target_link_libraries(GKlib m)
 endif(UNIX)

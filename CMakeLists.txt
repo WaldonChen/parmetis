@@ -5,20 +5,20 @@ set(PARMETIS_MAJOR_VERSION 4)
 set(PARMETIS_MINOR_VERSION 0)
 set(PARMETIS_PATCH_VERSION 3)
 
-set(GKLIB_PATH METIS/GKlib CACHE PATH "path to GKlib")
-set(METIS_PATH METIS CACHE PATH "path to METIS")
+set(GKLIB_PATH ${CMAKE_SOURCE_DIR}/metis/GKlib CACHE PATH "path to GKlib")
+set(METIS_PATH ${CMAKE_SOURCE_DIR}/metis CACHE PATH "path to METIS")
 
 # Symlink ./metis to wherever metis is. This allows files to be
 # included from metis/libmetis/.
-execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${METIS_PATH} metis)
+# execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${METIS_PATH} metis)
 
 # Search for MPI.
 # GK commented this out as it seems to be creating problems
-# include(FindMPI)
-# if(NOT MPI_FOUND)
-#   message(FATAL_ERROR "mpi is not found")
-# endif()
-# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${MPI_COMPILE_FLAGS}")
+include(FindMPI)
+if(NOT MPI_FOUND)
+  message(FATAL_ERROR "mpi is not found")
+endif()
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${MPI_COMPILE_FLAGS}")
 
 # Prepare libraries.
 if(SHARED)

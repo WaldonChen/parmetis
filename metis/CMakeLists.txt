@@ -1,8 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
 project(METIS)
 
-set(GKLIB_PATH "GKlib" CACHE PATH "path to GKlib")
+set(METIS_MAJOR_VERSION 5)
+set(METIS_MINOR_VERSION 1)
+set(METIS_PATCH_VERSION 0)
+
+set(GKLIB_PATH "${CMAKE_SOURCE_DIR}/GKlib" CACHE PATH "path to GKlib")
 set(SHARED FALSE CACHE BOOL "build a shared library")
+include(GNUInstallDirs)
 
 if(MSVC)
   set(METIS_INSTALL FALSE)
@@ -11,6 +16,7 @@ else()
 endif()
 
 # Configure libmetis library.
+set(METIS_LIBRARY_TYPE)
 if(SHARED)
   set(METIS_LIBRARY_TYPE SHARED)
 else()
