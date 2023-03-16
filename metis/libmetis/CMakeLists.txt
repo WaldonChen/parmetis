@@ -7,6 +7,8 @@ add_library(metis ${METIS_LIBRARY_TYPE} ${GKlib_sources} ${metis_sources})
 if(UNIX)
   target_link_libraries(metis m)
 endif()
+target_include_directories(
+  metis PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/metis/include>)
 
 if(METIS_INSTALL)
   install(TARGETS metis
