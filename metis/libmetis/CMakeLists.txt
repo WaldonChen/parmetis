@@ -1,18 +1,18 @@
-# Add this directory for internal users.
-include_directories(.)
 # Find sources.
-file(GLOB metis_sources *.c)
+aux_source_directory(. metis_sources)
 # Build libmetis.
-add_library(metis ${METIS_LIBRARY_TYPE} ${GKlib_sources} ${metis_sources})
+add_library(metis ${metis_sources} ${GKlib_sources})
 if(UNIX)
-  target_link_libraries(metis m)
+  target_link_libraries(metis PUBLIC m)
 endif()
+set_target_properties(metis PROPERTIES PUBLIC_HEADER ${METIS_HEADER})
+# Add this directory for internal users.
 target_include_directories(
-  metis PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/metis/include>)
+  metis PUBLIC
+  $<BUILD_INTERFACE:${GKLIB_PATH}>
+  # $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/metis/include>
+  $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
+  $<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include>
+  PRIVATE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 
-if(METIS_INSTALL)
-  install(TARGETS metis
-    LIBRARY DESTINATION lib
-    RUNTIME DESTINATION lib
-    ARCHIVE DESTINATION lib)
-endif()

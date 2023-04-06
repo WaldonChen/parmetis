@@ -1,42 +1,52 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
+
 project(ParMETIS)
 
-set(GKLIB_PATH ${PROJECT_SOURCE_DIR}/metis/GKlib CACHE PATH "path to GKlib")
-set(METIS_PATH ${PROJECT_SOURCE_DIR}/metis CACHE PATH "path to METIS")
-
-# Symlink ./metis to wherever metis is. This allows files to be
-# included from metis/libmetis/.
-# execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${METIS_PATH} metis)
+option(IDX64 "Use 64bit index value" OFF)
+option(BUILD_PROGRAMS "Build parmetis programs" OFF)
+option(BUILD_SHARED_LIBS "Build a shared library" OFF)
 
 # Search for MPI.
-# GK commented this out as it seems to be creating problems
-# include(FindMPI)
-# if(NOT MPI_FOUND)
-#   message(FATAL_ERROR "mpi is not found")
-# endif()
-# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${MPI_COMPILE_FLAGS}")
-
-# Prepare libraries.
-if(SHARED)
-  set(ParMETIS_LIBRARY_TYPE SHARED)
-else()
-  set(ParMETIS_LIBRARY_TYPE STATIC)
+find_package(MPI REQUIRED)
+if(NOT MPI_FOUND)
+  message(FATAL_ERROR "MPI is not found")
 endif()
 
-include(${GKLIB_PATH}/GKlibSystem.cmake)
+include(GNUInstallDirs)
+set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR})
 
-# List of paths that the compiler will search for header files.
-# i.e., the -I equivalent
-include_directories(include)
-include_directories(${MPI_INCLUDE_PATH})
-include_directories(${GKLIB_PATH})
-include_directories(${METIS_PATH}/include)
+# set(GKLIB_PATH "${PROJECT_SOURCE_DIR}/metis/GKlib")
+# include(${GKLIB_PATH}/GKlibSystem.cmake)
 
 # List of directories that cmake will look for CMakeLists.txt
-add_subdirectory(${METIS_PATH}/libmetis ${CMAKE_BINARY_DIR}/libmetis)
-add_subdirectory(include)
+add_subdirectory(metis)
 add_subdirectory(libparmetis)
-add_subdirectory(programs)
+
+if(BUILD_PROGRAMS)
+  add_subdirectory(programs)
+endif()
 
 # This is for testing during development and is not being distributed
-#add_subdirectory(test)
+# add_subdirectory(test)
+
+include(CMakePackageConfigHelpers)
+configure_package_config_file(cmake/parmetis-config.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/parmetis-config.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake
+  PATH_VARS INCLUDE_INSTALL_DIR)
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/parmetis-config-version.cmake
+  VERSION 4.0.3
+  COMPATIBILITY SameMajorVersion)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/parmetis-config.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/parmetis-config-version.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake)
+
+install(TARGETS parmetis EXPORT parmetis-targets)
+# install(TARGETS metis EXPORT metis-targets)
+install(EXPORT parmetis-targets FILE parmetis-targets.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake)
+# install(EXPORT metis-targets FILE metis-targets.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake)
+install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/parmetis-config-version.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/parmetis-config.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake)
